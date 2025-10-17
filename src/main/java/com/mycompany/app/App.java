@@ -10,12 +10,17 @@ import java.net.InetSocketAddress;
 
 public class App {
     public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
-        server.createContext("/", new HelloHandler());
-        server.setExecutor(null); // creates a default executor
-        server.start();
-        System.out.println("Server started on port 8082");
+    String port = System.getenv("PORT");
+    if (port == null) {
+        port = "8080";
     }
+    
+    HttpServer server = HttpServer.create(new InetSocketAddress(Integer.parseInt(port)), 0);
+    server.createContext("/", new HelloHandler());
+    server.setExecutor(null);
+    server.start();
+    System.out.println("Server started on port " + port);
+}
 
     static class HelloHandler implements HttpHandler {
         public void handle(HttpExchange exchange) throws IOException {
